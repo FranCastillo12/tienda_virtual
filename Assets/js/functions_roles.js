@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function(){
         //Evitar que la pagina de recargue
         e.preventDefault();
         //capturar las variables de formulario
+        var intIdRol = document.querySelector('#idRol').value;
         var strNombre = document.querySelector('#txtNombre').value;
         var strDescripcion = document.querySelector('#txtDescripcion').value;
         var intStatus = document.querySelector('#listStatus').value;   
@@ -60,7 +61,9 @@ document.addEventListener('DOMContentLoaded', function(){
                 $('#modalFormRol').modal("hide");
                 formRol.reset();
                 swal.fire("Roles de usuario", objData.msg ,"success");
-                tableRoles.api().ajax.reload();
+                tableRoles.api().ajax.reload(function(){
+                    fntEditRol();
+                });
             }else{
                 swal("Error", objData.msg , "error");
             }              

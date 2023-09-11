@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 formRol.reset();
                 swal.fire("Roles de usuario", objData.msg ,"success");
                 tableRoles.api().ajax.reload(function(){
-                    fntEditRol();
+                    //fntEditRol();
                 });
             }else{
                 swal("Error", objData.msg , "error");
@@ -94,7 +94,6 @@ window.addEventListener('load', function() {
 }, false);
 
 $(document).ready(function () {
-    alert("sds");
     fntEditRol();
 });
 
@@ -104,7 +103,7 @@ function fntEditRol(){
     var btnEditRol = document.querySelectorAll(".btnEditRol");
     btnEditRol.forEach(function(btnEditRol){
         btnEditRol.addEventListener('click',function(){
-            alert("sdsd");
+            
             document.querySelector('#titleModal').innerHTML ="Actualizar Rol";
             document.querySelector('.modal-header').classList.replace("headerRegister", "headerUpdate");
             document.querySelector('#btnActionForm').classList.replace("btn-primary", "btn-info");
@@ -117,7 +116,6 @@ function fntEditRol(){
             request.open("GET",ajaxUrl,true);
             request.send();
             request.onreadystatechange = function(){
-                alert(request.status);
                 if(request.readyState == 4 && request.status == 200){
                     //Se convierte en un objeto lo que responde la solicitud
                     alert(request.responseText);
@@ -125,7 +123,6 @@ function fntEditRol(){
                     alert(objData.status);
                     if(objData.status)
                     {
-                        alert("status 200");
                         document.querySelector("#idRol").value = objData.data.idrol;
                         document.querySelector("#txtNombre").value = objData.data.nombrerol;
                         document.querySelector("#txtDescripcion").value = objData.data.descripcion;

@@ -57,7 +57,7 @@
                 {
                     $arrResponse = array('status' => false, 'mgs' => 'Datos no encontrados');
                 }else{
-                    $arrResponse = array('status' => 'true', 'data' => $arrData);
+                    $arrResponse = array('status' => true, 'data' => $arrData);
                 }
                 
             }

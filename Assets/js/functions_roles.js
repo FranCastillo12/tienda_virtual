@@ -110,7 +110,7 @@ function fntEditRol(){
             //Obtener los datos del rol que se escogio
             var idrol = this.getAttribute("rl");
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/Roles/getRoles/'+idrol;
+            var ajaxUrl = base_url+'/Roles/getRol/'+idrol;
             request.open("GET",ajaxUrl,true);
             request.send();
             request.onreadystatechange = function(){

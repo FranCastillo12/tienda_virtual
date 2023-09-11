@@ -1,4 +1,9 @@
-    <!-- Essential javascripts for application to work-->
+<script>
+    const base_url = "<?= base_Url();?>"
+</script>
+
+
+<!-- Essential javascripts for application to work-->
     <script src="<?= media();?>/js/jquery-3.3.1.min.js"></script>
 
     <script src="<?= media();?>/js/popper.min.js"></script>
@@ -15,6 +20,10 @@
     <script src="../../Assets/js/plugins/pace.min.js"></script>
 
     <script src="https://kit.fontawesome.com/51074424af.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     </body>
 
     </html>

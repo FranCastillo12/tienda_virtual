@@ -66,6 +66,7 @@
 
         }        
         public function setRol(){
+            //se descompone el json que envia
             $intIdRol = intval($_POST['idRol']);
             $strRol =  strClean($_POST['txtNombre']);
             $strDescipcion = strClean($_POST['txtDescripcion']);
@@ -102,25 +103,21 @@
         }
 
         public function delRol(){
-            $intIdRol = intval($_POST['idRol']);
-            $requestDelete = $this->model->deleteRol( $intIdRol);
-            if($requestDelete == 'ok'){
-                $arrResponse = array('status' => true,'msg'=>'Se ha eliminado el rol');
-            }else if ($requestDelete == 'exist'){
-                $arrResponse = array('status'=>false,'msg'=>'No es posible eliminar un rol asociado a usuario');
+            $intIdrol = intval($_POST['idrol']);
+            $requestDelete = $this->model->deleteRol($intIdrol);
+            if($requestDelete == 'ok')
+            {
+                $arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el Rol');
+            }else if($requestDelete == 'exist'){
+                $arrResponse = array('status' => false, 'msg' => 'No es posible eliminar un Rol asociado a usuarios.');
             }else{
-                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el rol');    
+                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el Rol.');
             }
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            die();
+    die();
         }
     }
-
-
-
-
-
-
+    
     require_once "Models/rolesModel.php";
 
 ?>

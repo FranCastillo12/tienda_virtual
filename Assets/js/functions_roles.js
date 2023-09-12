@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 tableRoles.api().ajax.reload(function(){
                     fntEditRol();
                     fntDelRol();
+                    fntPermisos();
                 });
             }else{
                 swal("Error", objData.msg , "error");
@@ -93,6 +94,7 @@ function openModal(){
 window.addEventListener('load', function() {
     fntEditRol();
     fntDelRol();
+    fntPermisos();
 }, false);
 
 
@@ -154,49 +156,98 @@ function fntDelRol(){
             alert("ddddd1");
             //Obtener los datos del rol que se escogio
             var idrol = this.getAttribute("rl");
-            swal.fire({
+            Swal.fire({
                 title: "Eliminar Rol",
-                text: "¿Realmente quiere eliminar el Rol?",
-                type: "warning",
+                text: "¿Realmente desea eliminar el Rol?",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Si, eliminar!",
-                cancelButtonText: "No, cancelar!",
-                closeOnConfirm: false,
-                closeOnCancel: true
-                }, function(isConfirm) {
-                    if (isConfirm) 
-                    {
-                        var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-                        var ajaxUrl = base_url+'/Roles/delRol/';
-                        var strData = "idrol="+idrol;
-                        request.open("POST",ajaxUrl,true);
-                        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                        request.send(strData);
-                        request.onreadystatechange = function(){
-                            alert(request.responseText);
-                            if(request.readyState == 4 && request.status == 200){
-                                alert(request.responseText);
-                                var objData = JSON.parse(request.responseText);
-                                if(objData.status)
-                                {
-                                    swal.fire("Eliminar!", objData.msg , "success");
-                                    tableRoles.api().ajax.reload(function(){
-                                        fntEditRol();
-                                        fntDelRol();
-                                    });
-                                }else{
-                                    swal.fire("Atención!", objData.msg , "error");
-                                }
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "No, cancelar",
+            }).then((result) => {
+                alert(result.isConfirmed);
+                if (result.isConfirmed) {
+                    alert("Entro al confirm");
+                    // Tu código AJAX y lógica para la acción confirmada
+                    var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+                    var ajaxUrl = base_url + '/Roles/delRol/';
+                    var strData = "idrol=" + idrol;
+                    request.open("POST", ajaxUrl, true);
+                    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    request.send(strData);
+                    request.onreadystatechange = function () {
+                        if (request.readyState == 4 && request.status == 200) {
+                            var objData = JSON.parse(request.responseText);
+                            if (objData.status) {
+                                Swal.fire("Eliminar", objData.msg, "success");
+                                tableRoles.api().ajax.reload(function () {
+                                    fntEditRol();
+                                    fntDelRol();
+                                    fntPermisos();
+                                });
+                            } else {
+                                Swal.fire("Atención", objData.msg, "error");
                             }
                         }
                     }
-                });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Maneja la acción de cancelación aquí si es necesario
+                }
+            });            
             });
         });
 }
 
 
+function fntPermisos(){
+    var btnPermisosRol = document.querySelectorAll(".btnPermisosRol");
+    btnPermisosRol.forEach(function(btnPermisosRol){
+        btnPermisosRol.addEventListener('click',function(){
+            ///Extrar los datos de los modulos
+
+            var idrol = this.getAttribute("rl");
+            var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            var ajaxUrl = base_url+'/Permisos/getPermisosRol/'+idrol;
+            request.open("GET",ajaxUrl,true);
+            request.send();
+
+            //Leer lo que retorna la consutla
+            request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    document.querySelector('#contentAjax').innerHTML = request.responseText;
+                    $('.modalPermisos').modal('show');
+                    document.querySelector('#formPermisos').addEventListener('submit',fntSavePermisos,false);
+
+                }
+            }
+            
+        
+        });
+});
+}
 
 
+
+function fntSavePermisos(evnet){
+    evnet.preventDefault();
+    var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    var ajaxUrl = base_url+'/Permisos/setPermisos'; 
+    var formElement = document.querySelector("#formPermisos");
+    var formData = new FormData(formElement);
+    request.open("POST",ajaxUrl,true);
+    request.send(formData);
+
+    request.onreadystatechange = function(){
+        if(request.readyState == 4 && request.status == 200){
+            var objData = JSON.parse(request.responseText);
+            if(objData.status)
+            {
+                swal.fire("Permisos de usuario", objData.msg ,"success");
+            }else{
+                swal.fire("Error", objData.msg , "error");
+            }
+        }
+    }
+    
+}
 
 

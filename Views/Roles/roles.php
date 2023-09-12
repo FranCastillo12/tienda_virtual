@@ -3,7 +3,7 @@
 headerAdmin($data);
 require_once "Views/Template/Modals/modalRoles.php";
 ?>
-
+<div id="contentAjax"></div>
 <main class="app-content">
     <div class="app-title">
         <div>

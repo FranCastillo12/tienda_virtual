@@ -12,6 +12,7 @@
     <title><?= $data['page_title'] ?></title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css">
 
     <!-- Uso de sweetAlert-->

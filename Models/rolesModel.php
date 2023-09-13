@@ -27,7 +27,6 @@
 			return $request;
         }
 
-
         public function insertRol(string $rol, string $descripcion, int $status){
 
 			$return = "";

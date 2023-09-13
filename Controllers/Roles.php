@@ -13,7 +13,7 @@
         {
             $data['page_id'] = 3;
             $data['page_tag'] = "Roles Usuarios";
-            $data['page_name'] = "Rol_usuario";
+            $data['page_name'] = "roles";
             $data['page_title'] = "Roles Usuarios <small> Tienda Virtual</small>";
            //Invocar la vista home
             $this->views->getView($this,"roles",$data);
@@ -45,6 +45,18 @@
             die();
         }
 
+        public function getSelectRoles()
+        {
+            $HtmlOption = "";
+            $arrData = $this->model->selectRoles();
+            if(count($arrData)>0){
+                for ($i=0; $i < count($arrData) ; $i++) { 
+                    $htmlOptions .= '<option value="'.$arrData[$i]['idrol'].'">'.$arrData[$i]['nombrerol'].'</option>';
+                }
+            }
+            echo $htmlOptions;
+            die();
+        }
         public function getRol(int $idrol){
 
             $intidrol = intval(strClean(($idrol)));

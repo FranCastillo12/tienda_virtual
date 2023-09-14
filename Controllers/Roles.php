@@ -21,8 +21,11 @@
 
         //Metodo para obtener los roles
         public function getRoles(){
+
+        
             $arrData = $this->model->selectRoles();
 
+            
             //For para recorrer el json para saber el status
             for ($i=0; $i < count($arrData); $i++) { 
                 //IF para saber si el status es 1
@@ -51,7 +54,10 @@
             $arrData = $this->model->selectRoles();
             if(count($arrData)>0){
                 for ($i=0; $i < count($arrData) ; $i++) { 
-                    $htmlOptions .= '<option value="'.$arrData[$i]['idrol'].'">'.$arrData[$i]['nombrerol'].'</option>';
+                    if($arrData[$i]['status']== 1){
+                        $htmlOptions .= '<option value="'.$arrData[$i]['idrol'].'">'.$arrData[$i]['nombrerol'].'</option>';
+                    }
+                    
                 }
             }
             echo $htmlOptions;

@@ -152,7 +152,7 @@ function fntDelRol(){
     var btnDelRol = document.querySelectorAll(".btnDelRol");
     btnDelRol.forEach(function(btnDelRol){
         btnDelRol.addEventListener('click',function(){
-            alert("ddddd1");
+            
             //Obtener los datos del rol que se escogio
             var idrol = this.getAttribute("rl");
             Swal.fire({

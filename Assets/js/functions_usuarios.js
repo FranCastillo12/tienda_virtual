@@ -1,4 +1,5 @@
 var tableUsuarios;
+var divLoading = document.querySelector("#divLoading");
 document.addEventListener('DOMContentLoaded',function(){
     tableUsuarios = $('#tableUsuarios').dataTable( {
 		"aProcessing":true,
@@ -50,58 +51,178 @@ document.addEventListener('DOMContentLoaded',function(){
         "order":[[0,"desc"]]  
         
     });
-
-    var formUsuario = document.querySelector('#formUsuario');
-    formUsuario.onsubmit = function(e){
-        e.preventDefault();
-        //Capturar los datos
-        var strIdentificacion = document.querySelector('#txtIdentificacion').value;
-        var strNombre = document.querySelector('#txtNombre').value;
-        var strApellido = document.querySelector('#txtApellido').value;
-        var strEmail = document.querySelector('#txtEmail').value;
-        var intTelefono = document.querySelector('#txtTelefono').value;
-        var intTipousuario = document.querySelector('#listRolid').value;
-        var strPassword = document.querySelector('#txtPassword').value;
-        var intStatus = document.querySelector('#listStatus').value;
-        //Validacion para saber si los campos estan vacios
-        if(strIdentificacion == '' || strApellido == '' || strNombre == '' || strEmail == '' || intTelefono == '' || intTipousuario == '')
-        {
-            swal.fire("Atención", "Todos los campos son obligatorios." , "error");
-            return false;
-        }
-
-        let elementsValid = document.getElementsByClassName("valid");
-            for (let i = 0; i < elementsValid.length; i++) { 
-                if(elementsValid[i].classList.contains('is-invalid')) { 
-                    swal.fire("Atención", "Por favor verifique los campos en rojo." , "error");
-                    return false;
-                } 
-            } 
-
-        var request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject('Microsoft.XMLHTTP');
-        var ajaxUrl = base_url+'/Usuarios/setUsuario';
-        var formData = new FormData(formUsuario);
-        request.open("POST",ajaxUrl,true);
-        request.send(formData);
-
-        request.onreadystatechange = function(){
-            if(request.readyState == 4 && request.status == 200){
-                alert(request.responseText);
-                var objData = JSON.parse(request.responseText);
-                if(objData.status)
-                {
-                    $('#modalFormUser').modal("hide");
-                    formUsuario.reset();
-                    swal.fire("Usuarios", objData.msg ,"success");
-                    tableUsuarios.api().ajax.reload(function(){
-                        fntRolesUsuario();
-                    });
-                }else{
-                    swal("Error", objData.msg , "error");
-                }              
-            } 
-    
+    //Saber si existe el formulario para carga los eventos
+    if(document.querySelector('#formUsuario')){
+        var formUsuario = document.querySelector('#formUsuario');
+        formUsuario.onsubmit = function(e){
+            e.preventDefault();
+            //Capturar los datos
+            var strIdentificacion = document.querySelector('#txtIdentificacion').value;
+            var strNombre = document.querySelector('#txtNombre').value;
+            var strApellido = document.querySelector('#txtApellido').value;
+            var strEmail = document.querySelector('#txtEmail').value;
+            var intTelefono = document.querySelector('#txtTelefono').value;
+            var intTipousuario = document.querySelector('#listRolid').value;
+            var strPassword = document.querySelector('#txtPassword').value;
+            var intStatus = document.querySelector('#listStatus').value;
+            //Validacion para saber si los campos estan vacios
+            if(strIdentificacion == '' || strApellido == '' || strNombre == '' || strEmail == '' || intTelefono == '' || intTipousuario == '')
+            {
+                swal.fire("Atención", "Todos los campos son obligatorios." , "error");
+                return false;
             }
+
+            let elementsValid = document.getElementsByClassName("valid");
+                for (let i = 0; i < elementsValid.length; i++) { 
+                    if(elementsValid[i].classList.contains('is-invalid')) { 
+                        swal.fire("Atención", "Por favor verifique los campos en rojo." , "error");
+                        return false;
+                    } 
+                } 
+            divLoading.style.display = "flex";
+            var request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject('Microsoft.XMLHTTP');
+            var ajaxUrl = base_url+'/Usuarios/setUsuario';
+            var formData = new FormData(formUsuario);
+            request.open("POST",ajaxUrl,true);
+            request.send(formData);
+
+            request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    alert(request.responseText);
+                    var objData = JSON.parse(request.responseText);
+                    if(objData.status)
+                    {
+                        $('#modalFormUser').modal("hide");
+                        formUsuario.reset();
+                        swal.fire("Usuarios", objData.msg ,"success");
+                        tableUsuarios.api().ajax.reload(function(){
+                            //fntRolesUsuario();
+                        });
+                    }else{
+                        swal("Error", objData.msg , "error");
+                    }              
+                } 
+                divLoading.style.display = "none";
+				return false;
+                }
+        }
+    }
+    //Actualizar info del perfil
+    if(document.querySelector('#formPerfil')){
+        var formPerfil = document.querySelector('#formPerfil');
+        formPerfil.onsubmit = function(e){
+            e.preventDefault();
+            //Capturar los datos
+            var strIdentificacion = document.querySelector('#txtIdentificacion').value;
+            var strNombre = document.querySelector('#txtNombre').value;
+            var strApellido = document.querySelector('#txtApellido').value;
+            var intTelefono = document.querySelector('#txtTelefono').value;
+            let strPassword = document.querySelector('#txtPassword').value;
+            let strPasswordConfirm = document.querySelector('#txtPasswordConfirm').value;
+            //Validacion para saber si los campos estan vacios
+            if(strIdentificacion == '' || strApellido == '' || strNombre == '' || intTelefono == '')
+            {
+                swal.fire("Atención", "Todos los campos son obligatorios." , "error");
+                return false;
+            }
+            if(strPassword != "" || strPasswordConfirm != "")
+            {   
+                if( strPassword != strPasswordConfirm ){
+                    swal("Atención", "Las contraseñas no son iguales." , "info");
+                    return false;
+                }           
+                if(strPassword.length < 5 ){
+                    swal("Atención", "La contraseña debe tener un mínimo de 5 caracteres." , "info");
+                    return false;
+                }
+            }
+
+            let elementsValid = document.getElementsByClassName("valid");
+                for (let i = 0; i < elementsValid.length; i++) { 
+                    if(elementsValid[i].classList.contains('is-invalid')) { 
+                        swal.fire("Atención", "Por favor verifique los campos en rojo." , "error");
+                        return false;
+                    } 
+                } 
+            divLoading.style.display = "flex";
+            var request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject('Microsoft.XMLHTTP');
+            var ajaxUrl = base_url+'/Usuarios/putPerfil ';
+            var formData = new FormData(formPerfil);
+            request.open("POST",ajaxUrl,true);
+            request.send(formData);
+
+            request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    alert(request.responseText);
+                    var objData = JSON.parse(request.responseText);
+                    if(objData.status)
+                    {
+                        $('#modalFormPerfil').modal("hide");
+                        swal.fire({
+                            title: "",
+                            text: objData.msg,
+                            type: "success",
+                            confirmButtonText: "Aceptar",
+                            closeOnConfirm: false,
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                location.reload();
+                            }
+                        }); 
+                    }else{
+                        swal("Error", objData.msg , "error");
+                    }              
+                } 
+                divLoading.style.display = "none";
+				return false;
+                }
+        }
+    }
+    //Actualizar Datos Fiscales
+    if(document.querySelector("#formDataFiscal")){
+        let formDataFiscal = document.querySelector("#formDataFiscal");
+        formDataFiscal.onsubmit = function(e) {
+            e.preventDefault();
+            let strNit = document.querySelector('#txtNit').value;
+            let strNombreFiscal = document.querySelector('#txtNombreFiscal').value;
+            let strDirFiscal = document.querySelector('#txtDirFiscal').value;
+            if(strNit == '' || strNombreFiscal == '' || strDirFiscal == '' )
+            {
+                swal("Atención", "Todos los campos son obligatorios." , "error");
+                return false;
+            }
+            divLoading.style.display = "flex";
+            let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            let ajaxUrl = base_url+'/Usuarios/putDFical'; 
+            let formData = new FormData(formDataFiscal);
+            request.open("POST",ajaxUrl,true);
+            request.send(formData);
+            request.onreadystatechange = function(){
+                if(request.readyState != 4 ) return; 
+                if(request.status == 200){
+                    let objData = JSON.parse(request.responseText);
+                    if(objData.status)
+                    {
+                        $('#modalFormPerfil').modal("hide");
+                        swal({
+                            title: "",
+                            text: objData.msg,
+                            type: "success",
+                            confirmButtonText: "Aceptar",
+                            closeOnConfirm: false,
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                location.reload();
+                            }
+                        });
+                    }else{
+                        swal("Error", objData.msg , "error");
+                    }
+                }
+                divLoading.style.display = "none";
+                return false;
+            }
+        }
     }
 },false);
 
@@ -116,17 +237,19 @@ window.addEventListener("load", function(){
 },false);
 
 function fntRolesUsuario(){
-    var ajaxUrl = base_url+'/Roles/getSelectRoles'
-    var request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject('Microsoft.XMLHTTP');
-    request.open("GET",ajaxUrl,true);
-    request.send();
-    request.onreadystatechange = function(){
-            if(request.readyState == 4 && request.status == 200){
-                document.querySelector('#listRolid').innerHTML = request.responseText;
-                 //linea para actualizar el select
-                $('#listRolid').selectpicker('render');
-            }
-        } 
+    if(document.querySelector('#listRolid')){
+        var ajaxUrl = base_url+'/Roles/getSelectRoles'
+        var request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject('Microsoft.XMLHTTP');
+        request.open("GET",ajaxUrl,true);
+        request.send();
+        request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    document.querySelector('#listRolid').innerHTML = request.responseText;
+                    //linea para actualizar el select
+                    $('#listRolid').selectpicker('render');
+                }
+            } 
+    }
 }
 function fntViewUsuario(idpersona){
             var idpersona = idpersona;
@@ -200,7 +323,7 @@ function fntEditUsuario(idpersona){
                             document.querySelector("#listStatus").value = 1;
                         }
                         else{
-                            document.querySelector("#listStatus").value =22;
+                            document.querySelector("#listStatus").value = 2;
                         }
 
                         $('#listStatus').selectpicker('render');
@@ -263,4 +386,11 @@ function openModall(){
     $('#modalFormUser').modal('show');
 }
 
+
+
+///Abrir modal para actualizar datos de la personas desde el perfil
+function openModalPerfil(){
+    $('#modalFormPerfil').modal('show');
+
+}
 

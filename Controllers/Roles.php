@@ -5,8 +5,13 @@
 
         public function __construct()
         {
+            session_start();
+            session_regenerate_id(true);
+            if(empty($_SESSION['login'])){
+                header('Location '.base_Url().'/login');
+            }
             parent::__construct();
-            
+            getPermisos(2);
         }
 
         public function Roles()
@@ -22,29 +27,38 @@
         //Metodo para obtener los roles
         public function getRoles(){
 
-        
-            $arrData = $this->model->selectRoles();
+            if($_SESSION['permisosMod']['r']){
 
-            
-            //For para recorrer el json para saber el status
-            for ($i=0; $i < count($arrData); $i++) { 
-                //IF para saber si el status es 1
-                if ($arrData[$i]['status']== 1) {
-                    $arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
-                    # code...
-                }
-                else{
-                    $arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
-                }
+                $arrData = $this->model->selectRoles();
 
-                //Se le agrega al array de los datos el columna opcions 
-                $arrData[$i]['options'] ='<div class="text-center">
-                <button class="btn btn-secondary btn-sm btnPermisosRol" rl="'.$arrData[$i]['idrol'].'" title="Permisos"><i class="fas fa-key"></i></button>
-                <button class="btn btn-primary btn-sm btnEditRol" rl="'.$arrData[$i]['idrol'].'" title="Editar"><i class="fas fa-pencil-alt"></i></button>
-                <button class="btn btn-danger btn-sm btnDelRol" rl="'.$arrData[$i]['idrol'].'" title="Eliminar"><i class="far fa-trash-alt"></i></button>
-                </div>';
-            }
-            echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+                
+                //For para recorrer el json para saber el status
+                for ($i=0; $i < count($arrData); $i++) { 
+                    $btnView = "";
+                    $btnEdit = "";
+                    $btnDelete="";
+
+                    //IF para saber si el status es 1
+                    if ($arrData[$i]['status']== 1) {
+                        $arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
+                        # code...
+                    }
+                    else{
+                        $arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
+                    }
+                    if($_SESSION['permisosMod']['u']){
+                        $btnView = '<button class="btn btn-secondary btn-sm btnPermisosRol" rl="'.$arrData[$i]['idrol'].'" title="Permisos"><i class="fas fa-key"></i></button>';
+
+                        $btnEdit = '<button class="btn btn-primary btn-sm btnEditRol" rl="'.$arrData[$i]['idrol'].'" title="Editar"><i class="fas fa-pencil-alt"></i></button>';            
+                    }
+                    if($_SESSION['permisosMod']['d']){
+                        $btnDelete = '<button class="btn btn-danger btn-sm btnDelRol" rl="'.$arrData[$i]['idrol'].'" title="Eliminar"><i class="far fa-trash-alt"></i></button>';            
+                    }
+                    //Se le agrega al array de los datos el columna opcions 
+                    $arrData[$i]['options'] ='<div class="text-center">' . $btnView.' '.$btnEdit.' '.$btnDelete.'</div>';
+                }
+                echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+        }
             die();
         }
 
@@ -64,6 +78,7 @@
             die();
         }
         public function getRol(int $idrol){
+            if($_SESSION['permisosMod']['r']){
 
             $intidrol = intval(strClean(($idrol)));
 
@@ -80,25 +95,32 @@
                 
             }
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+        }
             die();
 
         }        
         public function setRol(){
+            if($_SESSION['permisosMod']['r']){
             //se descompone el json que envia
             $intIdRol = intval($_POST['idRol']);
             $strRol =  strClean($_POST['txtNombre']);
             $strDescipcion = strClean($_POST['txtDescripcion']);
             $intStatus = intval($_POST['listStatus']);
+            $request_rol = "";
             //Valiacion para saber los el intIdRol trae datos para saber si se modifica o se crea
             if($intIdRol == 0){
-                //Crear
-                $request_rol = $this->model->insertRol($strRol, $strDescipcion,$intStatus);
-                $option = 1;
-            }else{
-                //Actualizar
-                $request_rol = $this->model->updateRol($intIdRol,$strRol, $strDescipcion,$intStatus);
-                $option = 2;
 
+
+                if($_SESSION['permisosMod']['w']){
+                       //Crear
+                $option = 1;
+                    $request_rol = $this->model->insertRol($strRol, $strDescipcion,$intStatus);
+                }
+            }else{
+                if($_SESSION['permisosMod']['u']){
+                    $request_rol = $this->model->updateRol($intIdRol,$strRol, $strDescipcion,$intStatus);
+                $option = 2;
+                }
             }
             //Fin de la validacion
             if($request_rol > 0 )
@@ -117,10 +139,13 @@
 				$arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
 			}
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+        }
                 die();
         }
 
         public function delRol(){
+            if($_SESSION['permisosMod']['d'])
+                {
             $intIdrol = intval($_POST['idrol']);
             $requestDelete = $this->model->deleteRol($intIdrol);
             if($requestDelete == 'ok')
@@ -132,7 +157,8 @@
                 $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el Rol.');
             }
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-    die();
+        }
+            die();
         }
     }
     

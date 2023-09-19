@@ -7,14 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css">
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css"
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <!-- Uso de sweetAlert-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <title>Login - Vali Admin</title>
 </head>
 
@@ -26,45 +24,26 @@
         <div class="logo">
             <h1>Tienda Virtual</h1>
         </div>
-        <div class="login-box">
-
-            <div id="divLoading">   
+        <div class="login-box flipped">
+        <div class="divLoading">   
                 <div>   
                     <img src="<?= media();?>/images/loading.svg" alt="Loading">
                 </div>
             </div>
-
-            <form class="login-form" action="" name="formLogin" id="formLogin">
-                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>Iniciar Sesion</h3>
+            <form  id="formCambiarpass" name="formCambiarpass" class="forget-form" action="">
+            <input type="hidden" id="idUsuario" name="idUsuario" value="<?= $data['idpersona']; ?>" required >
+            <input type="hidden" id="txtEmail" name="txtEmail" value="<?= $data['email']; ?>" required >
+            <input type="hidden" id="txtToken" name="txtToken" value="<?= $data['token']; ?>" required >
+            
+                <h3 class="login-head"><i class="fas fa-key"></i>Cambiar contraseña</h3>
                 <div class="form-group">
-                    <label class="control-label">USUARIOS</label>
-                    <input id="txtEmail" name="txtEmail" class="form-control" type="email" placeholder="Email" autofocus>
+                    <input id="txtPassword" name="txtPassword" class="form-control" type="password" placeholder="password" required>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">CONSTRASEÑA</label>
-                    <input id="txtPassword" name="txtPassword"class="form-control" type="password" placeholder="Contraseña">
-                </div>
-                <div class="form-group">
-                    <div class="utility">
-                        <p class="semibold-text mb-2"><a href="#" data-toggle="flip">¿Olvidaste tu contraseña?</a></p>
-                    </div>
-                </div>
-                <div class="form-group btn-container">
-                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i>Iniciar Sesion</button>
-                </div>
-            </form>
-            <form  id="formRecetPass" name="formRecetPass" class="forget-form" action="">
-                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>¿Olvidaste tu contraseña?</h3>
-                <div class="form-group">
-                    <label class="control-label">EMAIL</label>
-                    <input id="txtEmailReset" name="txtEmailReset" class="form-control" type="email" placeholder="Email">
+                    <input id="txtPasswordConfirm" name="txtPasswordConfirm" class="form-control" type="password" placeholder="Confirmar Contraseña" required>
                 </div>
                 <div class="form-group btn-container">
                     <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw"></i>Reiniciar</button>
-                </div>
-                <div class="form-group mt-3">
-                    <p class="semibold-text mb-0"><a href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i>
-                            Back to Login</a></p>
                 </div>
             </form>
         </div>

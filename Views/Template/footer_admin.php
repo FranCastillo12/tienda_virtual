@@ -17,12 +17,17 @@
     <?php
     }?>
 
-    <?php if($data['page_name']=='usuarios'){
+    <?php if($data['page_name']=='usuarios' || ($data['page_name']=='pefil')){
     ?>
     <script src="<?= media();?>/js/functions_usuarios.js"></script>
     <?php
     }?>
-    
+
+    <?php if($data['page_name']=='clientes'){
+    ?>
+    <script src="<?= media();?>/js/functions_clientes.js"></script>
+    <?php
+    }?>
 
 
     <!-- Data table plugin-->

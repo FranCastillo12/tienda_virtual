@@ -8,11 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Abel OSH">
     <meta name="theme-color" content="#009688">
-    
+
     <title><?= $data['page_title'] ?></title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css">
 
     <!-- Uso de sweetAlert-->
@@ -23,6 +24,12 @@
 </head>
 
 <body class="app sidebar-mini">
+    <div id="divLoading">
+        <div>
+            <img src="<?= media();?>/images/loading.svg" alt="Loading">
+        </div>
+    </div>
+
     <!-- Navbar-->
     <header class="app-header"><a class="app-header__logo" href="<?= base_url(); ?>/dashboard">Tienda Virtual</a>
         <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"

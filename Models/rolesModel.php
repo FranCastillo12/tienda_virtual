@@ -13,9 +13,14 @@
         }
 
         public function selectRoles(){
-            //Extraer los daots
-            $sql = "SELECT * FROM rol WHERE status != 0";
-            $request = $this->select_all($sql);
+            
+			$whereAdmin = "";
+			if($_SESSION['idUser'] != 1 ){
+				$whereAdmin = " and idrol != 1 ";
+			}
+			//EXTRAE ROLES
+			$sql = "SELECT * FROM rol WHERE status != 0".$whereAdmin;
+			$request = $this->select_all($sql);
 			return $request;
         }
 

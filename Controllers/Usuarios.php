@@ -9,7 +9,6 @@
             session_regenerate_id(true);
             if(empty($_SESSION['login'])){
                 header('Location '.base_Url().'/login');
-                die();
             }
             getPermisos(2);
         }

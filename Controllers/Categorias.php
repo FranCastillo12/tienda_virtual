@@ -20,5 +20,5 @@
            //Invocar la vista home
             $this->views->getView($this,"usuarios",$data);
         }
-
+    }
 ?>

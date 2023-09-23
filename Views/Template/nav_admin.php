@@ -50,7 +50,7 @@
                 </a>
             <ul class="treeview-menu">
             <?php if(! empty($_SESSION["permisos"][4]['r'])){?>
-                <li><a class="treeview-item" href="<?= base_url(); ?>/produtos"><i class="icon fa fa-circle-o"></i>
+                <li><a class="treeview-item" href="<?= base_url(); ?>/productos"><i class="icon fa fa-circle-o"></i>
                         Prucductos</a></li>
 
                         <?php

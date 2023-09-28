@@ -31,4 +31,11 @@ const WEB_EMPRESA = "www.abelosh.com";
 const DESCRIPCION = "La mejor tienda en línea con artículos de moda.";
 const SHAREDHASH = "TiendaVirtual";
 
+
+
+const CAT_SLIDER = "1,2,3";
+const CAT_BANNER = "1,2,3";
+
+
+
 ?>

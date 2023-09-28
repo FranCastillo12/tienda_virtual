@@ -4,14 +4,10 @@ headerAdmin($data); ?>
 <main class="app-content">
 <?php
     require_once "Views/Template/Modals/modalProductos.php";
-    if(empty($_SESSION['permisosMod']['r'])){
+    //if(empty($_SESSION['permisosMod']['r'])){
 ?>
-    <p>Accesso Restringido</p>
-<?php
-    }else{
 
-    
-?>
+
     <div class="app-title">
         <div>
             <h1><i class="fas fa-box"></i> <?= $data['page_title'] ?>
@@ -54,7 +50,7 @@ headerAdmin($data); ?>
         </div>
     </div>
     <?php
-    }   
+    //}   
     ?>
 </main>
 

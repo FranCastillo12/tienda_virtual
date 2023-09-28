@@ -78,6 +78,9 @@
 					$intStock = intval($_POST['txtStock']);
 					$intStatus = intval($_POST['listStatus']);
 					$request_producto = "";
+					//Variable para guarda la ruta del producto
+					$ruta = strtolower(clear_cadena($strNombre));
+					$ruta = str_replace(" ","-",$ruta);
 
 					//$ruta = strtolower(clear_cadena($strNombre));
 					//$ruta = str_replace(" ","-",$ruta);
@@ -92,6 +95,7 @@
 																		$intCategoriaId,
 																		$strPrecio,
 																		$intStock,
+																		$ruta,
 																		$intStatus);
 						}
 					}else{
@@ -104,6 +108,7 @@
 																		$intCategoriaId,
 																		$strPrecio, 
 																		$intStock,
+																		$ruta,
 																		$intStatus);
 						}
 					}

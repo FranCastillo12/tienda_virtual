@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded",function(){
     if(document.querySelector("#formLogin")){
         var formLogin = document.querySelector('#formLogin');
         formLogin.onsubmit = function(e){
+			alert('sss');
     
             e.preventDefault();
             //Obtener los valores que se van a enviar
@@ -31,8 +32,12 @@ document.addEventListener("DOMContentLoaded",function(){
                     var objData = JSON.parse(request.responseText);
                     if(objData.status)
                     {
+						alert('sss');
                         //Se las credenciales son correctas lo redicrecciona
                         window.location = base_url+'/dashboard';
+
+						//La siguiente linea es para que recarga la pantalla
+						//window.location.reload(false);
                     }else{
                         swal.fire("Error", objData.msg , "error");
                         document.querySelector("#txtEmail").value = "";

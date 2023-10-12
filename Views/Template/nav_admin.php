@@ -9,9 +9,14 @@
         </div>
     </div>
     <ul class="app-menu">
+        <li> 
+            <a class="app-menu__item" href="<?= base_url(); ?>" target="_blank"> <i class="app-menu__icon fa fas fa-globe"
+                    aria-hidden="true"></i> <span class="app-menu__label">Ver sitio web</span> 
+            </a> 
+        </li>
+
+
         <?php if(! empty($_SESSION["permisos"][1]['r'])){?>
-
-
         <li> <a class="app-menu__item" href="<?= base_url(); ?>/dashboard"> <i
                     class="app-menu__icon fa fa-dashboard"></i> <span class="app-menu__label">Dashboard</span> </a>
         </li>
@@ -68,12 +73,9 @@
         }
         ?>
 
-        <?php if(! empty($_SESSION["permisos"][5]['r'])){?>
         <li> <a class="app-menu__item" href="<?= base_url(); ?>/logout"> <i class="app-menu__icon fa fa-sign-out"
                     aria-hidden="true"></i> <span class="app-menu__label">Logout</span> </a> </li>
-        <?php
-        }
-        ?>
+    
 
     </ul>
 </aside>

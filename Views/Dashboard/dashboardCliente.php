@@ -114,14 +114,36 @@ headerAdmin($data);?>
 
         <div class="col-md-6">
             <div class="tile">
-                <h3 class="tile-title">Utimos Pedidos</h3>
-                <div class="dflex">
-                    <input class="date-picker pagoMes" name="pagoMes" placeholder="Mes y Año">
-                    <button type="button" class="btnTipoVentasMes btn btn-info btn-sm" onclick="fntSearchPagos()"><i class="fas fa-search"></i></button>
-                </div>
-                <div id="divpagosMesAnio">
-                    
-                </div>
+                <h3 class="tile-title">Utimos Productos</h3>
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Monto</th>
+                            <th></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            if(count($data['productosTen'])){
+                                foreach ($data['productosTen'] as $producto) {
+                            
+                        ?>
+                        <tr>
+                            <td><?= $producto['idproducto']?></td>
+                            <td><?= $producto['nombre']?></td>
+                            <td><?= SMONEY. formatMoney($producto['precio'])?></td>
+                            <td><a href="<?= base_Url()?>/tienda/producto/<?= $producto['idproducto'].'/'.$producto['ruta']?>" target="blank="><i
+                                        class="fa fa-eye" aria-hidden="true"></i></a></td>
+                        </tr>
+                        <?php
+                            }   
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
 
         </div>
@@ -134,28 +156,15 @@ headerAdmin($data);?>
                 <h3 class="tile-title">Ventas por mes</h3>
                 <div class="dflex">
                     <input class="date-picker ventasMes" name="ventasMes" placeholder="Mes y Año">
-                    <button type="button" class="btnVentasMes btn btn-info btn-sm"><i class="fas fa-search"></i></button>
+                    <button type="button" class="btnVentasMes btn btn-info btn-sm"><i
+                            class="fas fa-search"></i></button>
                 </div>
                 <div id="divpVentasMes">
 
                 </div>
             </div>
 
-        </div>
-        <div class="col-md-12">
-            <div class="tile">
-                <h3 class="tile-title">Ventas por año</h3>
-                <div class="dflex">
-                    <input class="pagoAnio" name="pagoAnio" placeholder="Año" minlenght="4" maxlenght="4" onkeypress="return controlTag(event);">
-                    <button type="button" class="btnTipoVentasAnio btn btn-info btn-sm"><i class="fas fa-search"></i></button>
-                </div>
-                <div id="graficaAnio">
-
-                </div>
-            </div>
-
-        </div>
-
+        </div> 
     </div>
 </main>
 
@@ -163,50 +172,7 @@ headerAdmin($data);?>
     //Se llama el footer
     footerAdmin($data);?>
 
-<script>
-// Data retrieved from https://netmarketshare.com
-Highcharts.chart('divpagosMesAnio', {
-    chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-    },
-    title: {
-        text: 'Ventas por tipo pago <?= $data['pagosMes']['mes'].' '.$data['pagosMes']['anio']?>',
-        align: 'left'
-    },
-    tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    accessibility: {
-        point: {
-            valueSuffix: '%'
-        }
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-            }
-        }
-    },
-    series: [{
-        name: 'Brands',
-        colorByPoint: true,
-        data: [
-            <?php 
-            foreach ($data['pagosMes']['tipospago'] as $pagos) {
-              echo "{name:'".$pagos['tipopago']."',y:".$pagos['total']."},";
-            }
-           ?>
-        ]
-    }]
-});
-</script>
+
 
 <script>
 Highcharts.chart('divpVentasMes', {
@@ -256,7 +222,7 @@ Highcharts.chart('divpVentasMes', {
                   echo $dia['total'].",";
                 }
             ?>
-          ]
+        ]
     }],
 
     responsive: {
@@ -277,60 +243,3 @@ Highcharts.chart('divpVentasMes', {
 });
 </script>
 
-<script>
-Highcharts.chart('graficaAnio', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Ventas del año <?= $data['ventasAnio']['anio'] ?> '
-    },
-    subtitle: {
-        text: 'Esdística de ventas por mes'
-    },
-    xAxis: {
-        type: 'category',
-        labels: {
-            rotation: -45,
-            style: {
-                fontSize: '13px',
-                fontFamily: 'Verdana, sans-serif'
-            }
-        }
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: ''
-        }
-    },
-    legend: {
-        enabled: false
-    },
-    tooltip: {
-        pointFormat: 'Population in 2021: <b>{point.y:.1f} millions</b>'
-    },
-    series: [{
-           name: 'Population',
-          data: [
-            <?php 
-              foreach ($data['ventasAnio']['meses'] as $mes) {
-                echo "['".$mes['mes']."',".$mes['venta']."],";
-              }
-             ?>  
-        ],
-        dataLabels: {
-            enabled: true,
-            rotation: -90,
-            color: '#FFFFFF',
-            align: 'right',
-            format: '{point.y:.1f}', // one decimal
-            y: 10, // 10 pixels down from the top
-            style: {
-                fontSize: '13px',
-                fontFamily: 'Verdana, sans-serif'
-            }
-        }
-    }]
-});
-</script>

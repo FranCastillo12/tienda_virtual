@@ -21,9 +21,68 @@
             $data['page_tag'] = "Dashboard - Tienda Virtual";
             $data['page_title'] = "Dashboard - Tienda Virtual";
             $data['tag_name'] = "dashboard";
-           //Invocar la vista home
-            $this->views->getView($this,"dashboard",$data);
+            //Obtner los datos para enviarlos a la pagina principal
+            $data['usuarios'] = $this->model->cantUsuarios();
+            $data['clientes'] = $this->model->cantClientes();
+            $data['productos'] = $this->model->cantProductos();
+            $data['pedidos'] = $this->model->cantPedidos();
+            $data['lastOrders'] = $this->model->lastOrders();
+            $data['productosTen'] = $this->model->productosTen();
+
+            //Obtener el mes y el año actual
+            $anio = date('y');
+            $mes = date('m');
+
+            $data['pagosMes'] = $this->model->selectPagosMes($anio,$mes);
+            $data['ventasMDia'] = $this->model->selectVentasMes($anio,$mes);
+            $data['ventasAnio'] = $this->model->selectVentasAnio($anio);
+
+
+            if($_SESSION['userData']['idrol'] == 30){
+                $this->views->getView($this,"dashboardCliente",$data);
+
+            }else{
+                //Invocar la vista home
+                $this->views->getView($this,"dashboard",$data);
+            }
         }
+        public function tipoPagoMes(){
+			if($_POST){
+				$grafica = "tipoPagoMes";
+				$nFecha = str_replace(" ","",$_POST['fecha']);
+				$arrFecha = explode('-',$nFecha);
+				$mes = $arrFecha[0];
+				$anio = $arrFecha[1];
+				$pagos = $this->model->selectPagosMes($anio,$mes);
+				$script = getFile("Template/Modals/graficas",$pagos);
+				echo $script;
+				die();
+			}
+		}
+		public function ventasMes(){
+			if($_POST){
+				$grafica = "ventasMes";
+				$nFecha = str_replace(" ","",$_POST['fecha']);
+				$arrFecha = explode('-',$nFecha);
+				$mes = $arrFecha[0];
+				$anio = $arrFecha[1];
+				$pagos = $this->model->selectVentasMes($anio,$mes);
+				$script = getFile("Template/Modals/graficas",$pagos);
+				echo $script;
+				die();
+			}
+		}
+		public function ventasAnio(){
+			if($_POST){
+				$grafica = "ventasAnio";
+				$anio = intval($_POST['anio']);
+				$pagos = $this->model->selectVentasAnio($anio);
+				$script = getFile("Template/Modals/graficas",$pagos);
+				echo $script;
+				die();
+			}
+		}
+
     }
 
 ?>

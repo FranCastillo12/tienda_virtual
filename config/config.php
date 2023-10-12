@@ -36,6 +36,24 @@ const SHAREDHASH = "TiendaVirtual";
 const CAT_SLIDER = "1,2,3";
 const CAT_BANNER = "1,2,3";
 
+	//Datos para Encriptar / Desencriptar
+	const KEY = 'abelosh';
+	const METHODENCRIPT = "AES-128-ECB";
 
 
+	//Api PayPal
+
+	//SANDBOX PAYPAL
+	const URLPAYPAL = "https://api-m.sandbox.paypal.com";
+	const IDCLIENTE = "";
+	const SECRET = "";
+
+		//Datos Empresa
+		const DIRECCION = "Avenida las Américas Zona 13, Guatemala";
+		const TELEMPRESA = "+(502)78787845";
+		const WHATSAPP = "+50278787845";
+		const EMAIL_EMPRESA = "info@abelosh.com";
+		const EMAIL_PEDIDOS = "info@abelosh.com"; 
+		const EMAIL_SUSCRIPCION = "info@abelosh.com";
+		const EMAIL_CONTACTO = "info@abelosh.com";
 ?>

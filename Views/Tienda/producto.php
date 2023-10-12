@@ -1,6 +1,6 @@
 <?php 
 	headerTienda($data);
-	require_once "Views/Template/Modals/modalCarrito.php";
+	//require_once "Views/Template/Modals/modalCarrito.php";
     $arrProductos = $data['productos'];
     $arrProducto = $data['producto'];
     $arrImages = $arrProducto['images'];
@@ -21,7 +21,7 @@
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
 
-			<a href="<?= base_Url().'/tienda/categoria/'.$arrProducto['categoria']?>" class="stext-109 cl8 hov-cl1 trans-04">
+			<a href="<?= base_Url().'/tienda/categoria/'.$arrProducto['categoriaid'].'/'.$arrProducto['ruta_categoria']?>" class="stext-109 cl8 hov-cl1 trans-04">
 				<?= $arrProducto['categoria']?>
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
@@ -51,7 +51,7 @@
                             ?>
 								<div class="item-slick3" data-thumb="<?=$arrImages[$img]['url_image']?>">
 									<div class="wrap-pic-w pos-relative">
-										<img src="<?=$arrImages[$img]['url_image']?>" alt="<?= $arrProductop['nombre']?>">
+										<img src="<?=$arrImages[$img]['url_image']?>" alt="<?= $arrProducto['nombre']?>">
 
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="images/product-detail-01.jpg">
 											<i class="fa fa-expand"></i>
@@ -111,14 +111,14 @@
 											<i class="fs-16 zmdi zmdi-minus"></i>
 										</div>
 
-										<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+										<input id="cant-product" class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1" min="1"  >
 
 										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 											<i class="fs-16 zmdi zmdi-plus"></i>
 										</div>
 									</div>
 
-									<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+									<button id="<?= openssl_encrypt($arrProducto['idproducto'],METHODENCRIPT,KEY)?>" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
 										Agregar al carrito
 									</button>
 								</div>
@@ -167,7 +167,8 @@
 				<div class="slick2">
                 <?php 
 					if(!empty($arrProductos)){
-						for ($p=0; $p < count($arrProductos); $p++) { 
+						for ($p=0; $p < count($arrProductos); $p++) {
+							$ruta = $arrProductos[$p]['ruta'];
 							if(count($arrProductos[$p]['images']) > 0 ){
 								$portada = $arrProductos[$p]['images'][0]['url_image'];
 							}else{
@@ -180,7 +181,7 @@
 							<div class="block2-pic hov-img0">
 								<img src="<?= $portada?>" alt="<?= $arrProductos[$p]['nombre']?>">
 
-								<a href="<?= base_Url().'/tienda/producto/'.$arrProductos[$p]['nombre']?>" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+								<a href="<?= base_Url().'/tienda/producto/'.$arrProductos[$p]['idproducto'].'/'.$ruta ?>" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
 									Ver producto
 								</a>
 							</div>
@@ -217,6 +218,6 @@
 	</section>
 
     <?php 
-	//footerTienda($data);
-    require_once "Views/Template/footer_tienda.php";
+	footerTienda($data);
+    //require_once "Views/Template/footer_tienda.php";
 ?>

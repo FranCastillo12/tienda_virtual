@@ -83,7 +83,10 @@ document.addEventListener('DOMContentLoaded',function(){
                 } 
             divLoading.style.display = "flex";
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/clientes/setCliente ';
+            var ajaxUrl ='//Controllers/Clientes.php/setCliente';
+            var base_url = window.location.origin;
+            alert(base_url);
+            alert(ajaxUrl);
             var formData = new FormData(formCliente);
             request.open("POST",ajaxUrl,true);
             request.send(formData);

@@ -23,7 +23,18 @@
             $data['page_tag'] = "Tienda Virtuallll";
             $data['page_title'] = "Tienda Virtual";
             $data['page_name'] = "tienda";
-            $data['productos'] = $this->getProductosT();
+            //$data['productos'] = $this->getProductosT();
+			$pagina = 1;
+			$cantProductos = $this->cantProductos();
+			$total_registro = $cantProductos['total_registro'];
+			$desde = ($pagina-1) * 3;
+			//FUNCION CIEL SIRVE PARA OBTENER UN NUMERO ENTERO
+			$total_paginas = ceil($total_registro/3);
+            $data['productos'] = $this->getProductosPage($desde,3 );
+			$data['pagina'] = $pagina;
+			$data['total_paginas']= $total_paginas;
+
+
 
             
            //Invocar la vista home
@@ -41,7 +52,19 @@
                 $arrParams = explode(",",$params);
                 $idcategoria = intval($arrParams[0]);
                 $ruta = strClean($arrParams[1]);
-                $infoCategoria = $this->getProductosCategoriaT($idcategoria,$ruta);
+				
+				$pagina = 1;
+				if(count($arrParams) > 2 AND is_numeric($arrParams[2])){
+					$pagina = $arrParams[2]; 
+				}
+				//Saber la cantidad de productos que se tiene en la base de datos
+				$cantProductos = $this->cantProductos($idcategoria );
+
+
+				$total_registro = $cantProductos['total_registro'];
+				$desde = ($pagina-1) * 2;
+				$total_paginas = ceil($total_registro / 2);
+				$infoCategoria = $this->getProductosCategoriaT($idcategoria,$ruta,$desde,2);
 
                 $categoria = strClean($params);
                 
@@ -49,7 +72,10 @@
                 $data['page_title'] = $infoCategoria['categoria'];
                 $data['page_name'] = "categoria";
                 $data['productos'] = $infoCategoria['productos'];
+                $data['infoCategoria'] = $infoCategoria;
 
+				$data['pagina'] = $pagina;
+				$data['total_pagina'] = $total_paginas;
                 
             //Invocar la vista home
                 $this->views->getView($this,"categoria",$data);
@@ -395,6 +421,110 @@
 			}
 			unset($_SESSION['dataorden']);
 		}
+		public function page($pagina = null){
+
+			$pagina = is_numeric($pagina) ? $pagina : 1;
+			$cantProductos = $this->cantProductos();
+			$total_registro = $cantProductos['total_registro'];
+			$desde = ($pagina-1) * PROPORPAGINA;
+			$total_paginas = ceil($total_registro / PROPORPAGINA);
+			$data['productos'] = $this->getProductosPage($desde,PROPORPAGINA);
+			//dep($data['productos']);exit;
+			$data['page_tag'] = NOMBRE_EMPESA;
+			$data['page_title'] = NOMBRE_EMPESA;
+			$data['page_name'] = "tienda";
+			$data['pagina'] = $pagina;
+			$data['total_paginas'] = $total_paginas;
+			$data['categorias'] = $this->getCategorias();
+			$this->views->getView($this,"tienda",$data);
+		}
+
+		public function search(){
+			if(empty($_REQUEST['s'])){
+				header("Location: ".base_url());
+			}else{
+				$busqueda = strClean($_REQUEST['s']);
+			}
+
+			$pagina = empty($_REQUEST['p']) ? 1 : intval($_REQUEST['p']);
+			$cantProductos = $this->cantProdSearch($busqueda);
+			$total_registro = $cantProductos['total_registro'];
+			$desde = ($pagina-1) * 2;
+			$total_paginas = ceil($total_registro / 2);
+			$data['productos'] = $this->getProdSearch($busqueda,$desde,2);
+			$data['page_tag'] = "Tienda Virtual";
+			$data['page_title'] = "Resultado de: ".$busqueda;
+			$data['page_name'] = "tienda";
+			$data['pagina'] = $pagina;
+			$data['total_paginas'] = $total_paginas;
+			$data['busqueda'] = $busqueda;
+			$data['categorias'] = $this->getCategorias();
+			$this->views->getView($this,"search",$data);
+
+		}
+
+		public function suscripcion(){
+			if($_POST){
+				$nombre = ucwords(strtolower(strClean($_POST['nombreSuscripcion'])));
+				$email  = strtolower(strClean($_POST['emailSuscripcion']));
+
+				$suscripcion = $this->setSuscripcion($nombre,$email);
+				if($suscripcion > 0){
+					$arrResponse = array('status' => true, 'msg' => "Gracias por tu suscripción.");
+					//Enviar correo
+					$dataUsuario = array('asunto' => "Nueva suscripción",
+										'email' => EMAIL_SUSCRIPCION,
+										'nombreSuscriptor' => $nombre,
+										'emailSuscriptor' => $email );
+					sendEmail($dataUsuario,"email_suscripcion");
+				}else{
+					$arrResponse = array('status' => false, 'msg' => "El email ya fue registrado.");
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+
+			}
+			die();
+		}
+
+		public function contacto(){
+			if($_POST){
+				//dep($_POST);
+				$nombre = ucwords(strtolower(strClean($_POST['nombreContacto'])));
+				$email  = strtolower(strClean($_POST['emailContacto']));
+				$mensaje  = strClean($_POST['mensaje']);
+				$useragent = $_SERVER['HTTP_USER_AGENT'];
+				$ip        = $_SERVER['REMOTE_ADDR'];
+				$dispositivo= "PC";
+
+				if(preg_match("/mobile/i",$useragent)){
+					$dispositivo = "Movil";
+				}else if(preg_match("/tablet/i",$useragent)){
+					$dispositivo = "Tablet";
+				}else if(preg_match("/iPhone/i",$useragent)){
+					$dispositivo = "iPhone";
+				}else if(preg_match("/iPad/i",$useragent)){
+					$dispositivo = "iPad";
+				}
+
+				$userContact = $this->setContacto($nombre,$email,$mensaje,$ip,$dispositivo,$useragent);
+				if($userContact > 0){
+					$arrResponse = array('status' => true, 'msg' => "Su mensaje fue enviado correctamente.");
+					//Enviar correo
+					$dataUsuario = array('asunto' => "Nueva Usuario en contacto",
+										'email' => EMAIL_CONTACTO,
+										'nombreContacto' => $nombre,
+										'emailContacto' => $email,
+										'mensaje' => $mensaje );
+					sendEmail($dataUsuario,"email_contacto");
+				}else{
+					$arrResponse = array('status' => false, 'msg' => "No es posible enviar el mensaje.");
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+
+			}
+			die();
+		}
+
     }
 
 ?>

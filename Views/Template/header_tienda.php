@@ -63,26 +63,62 @@
 	
 	<!-- Header -->
 	<header>
+		<!-- Modal -->
+	<div class="modal fade" id="modalAyuda" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"><?= $tituloPreguntas ?></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      		<div class="page-content">
+	        		<?= $infoPreguntas; ?>
+	      		</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 		<!-- Header desktop -->
 		<div class="container-menu-desktop">
 			<!-- Topbar -->
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
-						Bienvenido usuario:Carlos Arana
+						<?php if(isset($_SESSION['LOGIN'])){?>
+						Bienvenido usuario: <?= $_SESSION['userData']['nombres'].' '.$_SESSION['userData']['apellidos']?>
+						<?php
+						}
+						?>
 					</div>
 
 					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
+						<a href="#" class="flex-c-m trans-04 p-lr-25" data-toggle="modal" data-target="#modalAyuda">
 							Help & FAQs
 						</a>
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
+						<?php 
+							if(isset($_SESSION['login'])){
+						?>
+						<a href="<?= base_url() ?>/dashboard" class="flex-c-m trans-04 p-lr-25">
 							Mi cuenta
 						</a>
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
+						<?php } 
+							if(isset($_SESSION['login'])){
+						?>
+						<a href="<?= base_url() ?>/logout" class="flex-c-m trans-04 p-lr-25">
 							Salir
 						</a>
+						<?php }else{ ?>
+						<a href="<?= base_url() ?>/login" class="flex-c-m trans-04 p-lr-25">
+							Iniciar Sesión
+						</a>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
@@ -219,11 +255,12 @@
 					<img src="images/icons/icon-close2.png" alt="CLOSE">
 				</button>
 
-				<form class="wrap-search-header flex-w p-l-15">
+				<form class="wrap-search-header flex-w p-l-15" method="get" action="<?php base_Url()?>/tienda/search/">
 					<button class="flex-c-m trans-04">
 						<i class="zmdi zmdi-search"></i>
 					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
+					<input type="hidden" name="p" value="1">
+					<input class="plh3" type="text" name="s" placeholder="Buscar...">
 				</form>
 			</div>
 		</div>

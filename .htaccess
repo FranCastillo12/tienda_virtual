@@ -1,7 +1,6 @@
-#Evita que se pueda ver el contenido de las carpetas
-Options All -Indexes
-RewriteEngine on 
 
+RewriteEngine on 
+Options All -Indexes
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

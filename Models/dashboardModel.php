@@ -70,7 +70,7 @@
 			$rolid = $_SESSION['userData']['idrol'];
 			$idUser = $_SESSION['userData']['idpersona'];
 			$where = "";
-			if($rolid == RCLIENTES ){
+			if($rolid == 30 ){
 				$where = " AND personaid = ".$idUser;
 			}
 

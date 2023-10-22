@@ -1,6 +1,9 @@
 <?php  
 //Se llama el header 
-headerAdmin($data); ?>
+//headerAdmin($data);
+require_once 'Views/Template/header_admin.php';
+//require_once'Views/Template/header_admin.php';
+?>
 <main class="app-content">
 <?php
     require_once "Views/Template/Modals/modalClientes.php";
@@ -60,6 +63,8 @@ headerAdmin($data); ?>
 
 <?php
     //Se llama el footer
-    footerAdmin($data);
-    //getModal("modalRoles",$data); require_once "../../Assets/js/functions_usuarios.js";
+    //footerAdmin($data);
+    //getModal("modalRoles",$data); 
+    require_once'Views/Template/footer_admin.php';
+    //require_once "../../Assets/js/functions_usuarios.js";
     ?>

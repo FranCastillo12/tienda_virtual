@@ -220,6 +220,9 @@
 
 			<div class="row isotope-grid">
                 <?php
+				//Contar si trae productos
+				if(count($arrProductos) > 0){
+
                     for ($p=0; $p < count($arrProductos); $p++) { 
 						$ruta = $arrProducto[$p]['ruta'];
                         if(count($arrProductos[$p]['images']) > 0 ){
@@ -263,16 +266,31 @@
 
                 <?php
                     }
+				}else{
                 ?>
 
+					<p>No hay productos para mostrar <a href="<?= base_Url()?>/tienda">Ver productos</a></p>	
+				<?php
+				}
+				?>
 			</div>
-
 			<!-- Load more -->
+			<?php 
+				if(count($data['productos']) > 0){
+					$prevPagina = $data['pagina'] - 1;
+					$nextPagina = $data['pagina'] + 1;
+			 ?>
 			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-					Load More
-				</a>
+			<?php if($data['pagina'] > 1){ ?>
+				<a href="<?= base_url() ?>/tienda/page/<?= $prevPagina ?>" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"> <i class="fas fa-chevron-left"></i> &nbsp; Anterior </a>&nbsp;&nbsp;
+			<?php } ?>
+			<?php if($data['pagina'] != $data['total_paginas']){ ?>
+				<a href="<?= base_url() ?>/tienda/page/<?= $nextPagina ?>" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04"> Siguiente &nbsp; <i class="fas fa-chevron-right"></i> </a>
+			<?php } ?>
 			</div>
+			<?php 
+				}
+			 ?>
 		</div>
 	</div>
 <?php 
